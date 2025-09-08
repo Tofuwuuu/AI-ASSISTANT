@@ -4,6 +4,7 @@ import uuid
 import shutil
 import os
 from typing import List
+from pdf_processor import process_pdf
 
 app = FastAPI()
 
@@ -48,7 +49,23 @@ async def upload_pdf(file: UploadFile):
         with open(path, "wb") as buffer:
             shutil.copyfileobj(file.file, buffer)
         
-        return {"pdf_id": pdf_id, "status": "uploaded", "filename": file.filename}
+        # Process the PDF
+        try:
+            process_result = process_pdf(pdf_id, path)
+            return {
+                "pdf_id": pdf_id,
+                "status": "processed",
+                "filename": file.filename,
+                "num_chunks": process_result["num_chunks"]
+            }
+        except Exception as e:
+            # If processing fails, we still keep the uploaded file
+            return {
+                "pdf_id": pdf_id,
+                "status": "uploaded",
+                "filename": file.filename,
+                "warning": "File uploaded but processing failed"
+            }
     
     except Exception as e:
         # Clean up any partially written file
