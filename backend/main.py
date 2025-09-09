@@ -3,10 +3,15 @@ from fastapi.middleware.cors import CORSMiddleware
 import uuid
 import shutil
 import os
+import logging
 from typing import List
 from pdf_processor import process_pdf
 from embeddings import build_faiss_index
 from query import query_pdf
+
+# Configure logging
+logging.basicConfig(level=logging.DEBUG)
+logger = logging.getLogger(__name__)
 
 app = FastAPI()
 
@@ -18,6 +23,10 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
+@app.on_event("startup")
+async def startup_event():
+    logger.info("Starting up FastAPI application")
 
 # Configure upload directory
 UPLOAD_DIR = "data/pdfs"

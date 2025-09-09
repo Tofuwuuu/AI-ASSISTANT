@@ -56,16 +56,32 @@ def query_pdf(pdf_id: str, question: str, top_k: int = 3):
         if not retrieved_chunks:
             raise ValueError("No relevant chunks found")
 
-    # Join chunks into context
-    context = " ".join(retrieved_chunks)
+        # Join chunks into context
+        context = " ".join(retrieved_chunks)
 
-    # Run Q&A model
-    result = qa_pipeline(question=question, context=context)
+        # Run Q&A model
+        result = qa_pipeline(question=question, context=context)
 
-    return {
-        "pdf_id": pdf_id,
-        "question": question,
-        "answer": result["answer"],
-        "score": result["score"],
-        "sources": retrieved_chunks
-    }
+        return {
+            "pdf_id": pdf_id,
+            "question": question,
+            "answer": result["answer"],
+            "score": result["score"],
+            "sources": retrieved_chunks
+        }
+    except Exception as e:
+        raise Exception(f"Error querying PDF: {str(e)}")
+
+        # Join chunks into context
+        context = " ".join(retrieved_chunks)
+
+        # Run Q&A model
+        result = qa_pipeline(question=question, context=context)
+
+        return {
+            "pdf_id": pdf_id,
+            "question": question,
+            "answer": result["answer"],
+            "score": result["score"],
+            "sources": retrieved_chunks
+        }
