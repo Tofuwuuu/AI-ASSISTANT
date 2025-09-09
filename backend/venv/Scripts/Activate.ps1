@@ -27,7 +27,7 @@ function global:deactivate ([switch]$NonDestructive) {
 
 deactivate -nondestructive
 
-$env:VIRTUAL_ENV="F:\Project\1. Other project\AI ASSISTANT\backend\venv"
+$env:VIRTUAL_ENV="F:\Project\1. Other project\AI-ASSISTANT\backend\venv"
 
 if (! $env:VIRTUAL_ENV_DISABLE_PROMPT) {
     # Set the prompt to include the env name

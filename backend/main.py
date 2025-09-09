@@ -1,10 +1,12 @@
-from fastapi import FastAPI, UploadFile, HTTPException
+from fastapi import FastAPI, UploadFile, HTTPException, Body
 from fastapi.middleware.cors import CORSMiddleware
 import uuid
 import shutil
 import os
 from typing import List
 from pdf_processor import process_pdf
+from embeddings import build_faiss_index
+from query import query_pdf
 
 app = FastAPI()
 
@@ -72,3 +74,31 @@ async def upload_pdf(file: UploadFile):
         if os.path.exists(path):
             os.remove(path)
         raise HTTPException(status_code=500, detail="Failed to upload file")
+
+@app.post("/index/{pdf_id}")
+async def create_index(pdf_id: str):
+    """Create FAISS index for a processed PDF"""
+    try:
+        result = build_faiss_index(pdf_id)
+        return result
+    except FileNotFoundError as e:
+        raise HTTPException(status_code=404, detail=str(e))
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Failed to create index: {str(e)}")
+
+@app.post("/query")
+async def ask_question(payload: dict = Body(...)):
+    """Query a PDF with a question"""
+    pdf_id = payload.get("pdf_id")
+    question = payload.get("question")
+
+    if not pdf_id or not question:
+        raise HTTPException(status_code=400, detail="Missing pdf_id or question")
+
+    try:
+        result = query_pdf(pdf_id, question)
+        return result
+    except FileNotFoundError as e:
+        raise HTTPException(status_code=404, detail=str(e))
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Query failed: {str(e)}")
