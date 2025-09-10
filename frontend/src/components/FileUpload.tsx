@@ -4,9 +4,14 @@ interface UploadResponse {
     pdf_id: string;
     status: string;
     filename: string;
+    num_chunks?: number;
 }
 
-export const FileUpload = () => {
+interface FileUploadProps {
+    onUploadSuccess: (response: UploadResponse) => void;
+}
+
+export const FileUpload = ({ onUploadSuccess }: FileUploadProps) => {
     const [uploading, setUploading] = useState(false);
     const [error, setError] = useState<string | null>(null);
     const [success, setSuccess] = useState<UploadResponse | null>(null);
@@ -36,14 +41,13 @@ export const FileUpload = () => {
         }
 
         const formData = new FormData();
-        formData.append('file', file, file.name);
+        formData.append('file', file);
 
         try {
+            console.log('Uploading file:', file.name, 'size:', file.size);
             const response = await fetch('http://localhost:8080/upload', {
                 method: 'POST',
-                body: formData,
-                // Remove all headers and let the browser handle it
-                credentials: 'omit'
+                body: formData
             });
 
             if (!response.ok) {
@@ -53,6 +57,7 @@ export const FileUpload = () => {
 
             const data: UploadResponse = await response.json();
             setSuccess(data);
+            onUploadSuccess(data);
             
             // Reset file input
             if (fileInputRef.current) {

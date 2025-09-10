@@ -40,15 +40,18 @@ async def read_root():
     return {"message": "Welcome to FastAPI Backend"}
 
 @app.post("/upload")
-async def upload_pdf(file: UploadFile = File(...)):
+async def upload_pdf(file: UploadFile = File(description="PDF file to upload")):
+    """
+    Upload and process a PDF file
+    """
     logger.debug("Received upload request")
-    logger.debug(f"File object: {file}")
-    logger.debug(f"File filename: {file.filename if file else 'No file'}")
-    logger.debug(f"Content type: {file.content_type if file else 'No content type'}")
     
     if not file:
         logger.error("No file received in request")
-        raise HTTPException(status_code=422, detail="No file received")
+        raise HTTPException(status_code=422, detail="No file received in the request")
+        
+    logger.debug(f"File received: {file.filename}")
+    logger.debug(f"Content type: {file.content_type}")
         
     # Validate file type
     if not file.filename.lower().endswith('.pdf'):
