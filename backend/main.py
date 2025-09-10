@@ -1,4 +1,4 @@
-from fastapi import FastAPI, UploadFile, HTTPException, Body
+from fastapi import FastAPI, UploadFile, HTTPException, Body, File
 from fastapi.middleware.cors import CORSMiddleware
 import uuid
 import shutil
@@ -13,12 +13,12 @@ from query import query_pdf
 logging.basicConfig(level=logging.DEBUG)
 logger = logging.getLogger(__name__)
 
-app = FastAPI()
+app = FastAPI(title="PDF Processing API")
 
 # Configure CORS
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:5173"],  # React Vite default port
+    allow_origins=["http://localhost:5173", "http://localhost:5174"],  # React Vite ports
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
@@ -40,9 +40,19 @@ async def read_root():
     return {"message": "Welcome to FastAPI Backend"}
 
 @app.post("/upload")
-async def upload_pdf(file: UploadFile):
+async def upload_pdf(file: UploadFile = File(...)):
+    logger.debug("Received upload request")
+    logger.debug(f"File object: {file}")
+    logger.debug(f"File filename: {file.filename if file else 'No file'}")
+    logger.debug(f"Content type: {file.content_type if file else 'No content type'}")
+    
+    if not file:
+        logger.error("No file received in request")
+        raise HTTPException(status_code=422, detail="No file received")
+        
     # Validate file type
     if not file.filename.lower().endswith('.pdf'):
+        logger.error(f"Invalid file type: {file.filename}")
         raise HTTPException(status_code=400, detail="File must be a PDF")
     
     # Check file size

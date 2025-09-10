@@ -36,12 +36,14 @@ export const FileUpload = () => {
         }
 
         const formData = new FormData();
-        formData.append('file', file);
+        formData.append('file', file, file.name);
 
         try {
-            const response = await fetch('http://localhost:8000/upload', {
+            const response = await fetch('http://localhost:8080/upload', {
                 method: 'POST',
                 body: formData,
+                // Remove all headers and let the browser handle it
+                credentials: 'omit'
             });
 
             if (!response.ok) {
