@@ -1,42 +1,186 @@
-#root {
-  max-width: 1280px;
+
+/* PDF Upload UI */
+.pdf-upload-ui {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  width: 100%;
+  min-height: 100vh;
+  padding-top: 4rem;
+  box-sizing: border-box;
+  background-color: #fff;
+}
+
+.pdf-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  width: 100%;
+  max-width: 600px;
   margin: 0 auto;
-  padding: 2rem;
+  padding: 0 1rem;
+  text-align: center;
+  min-height: 100vh;
+}
+.pdf-title {
+  font-size: 2.5rem;
+  font-weight: 700;
+  margin-bottom: 3rem;
+  color: #1f2937;
+  text-align: center;
+  width: 100%;
+  margin-top: 0;
+}
+.pdf-upload-box {
+  border: 2px dashed #d1d5db;
+  border-radius: 18px;
+  padding: 3rem 2.5rem;
+  background: #fafbfc;
+  width: 100%;
+  max-width: 500px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 2rem;
+  position: relative;
+  transition: all 0.2s ease;
+  cursor: pointer;
+}
+.pdf-upload-box.drag-active {
+  border-color: #6366f1;
+  background: #f3f4f6;
+}
+.pdf-upload-icon {
+  margin-bottom: 1.2rem;
+}
+.pdf-upload-text {
+  font-size: 1.25rem;
+  margin-bottom: 1.5rem;
+  color: #4b5563;
   text-align: center;
 }
+.pdf-upload-btn {
+  display: inline-block;
+  background: #f3f4f6;
+  border-radius: 8px;
+  padding: 0.7rem 2.2rem;
+  font-size: 1.15rem;
+  font-weight: 500;
+  color: #222;
+  border: none;
+  cursor: pointer;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.04);
+  margin-bottom: 0.5rem;
+  transition: background 0.2s;
+}
+.pdf-upload-btn:hover {
+  background: #e5e7eb;
+}
+.pdf-processing {
+  margin-top: 1.5rem;
+  font-size: 1.1rem;
+  color: #4b5563;
+  text-align: center;
+  width: 100%;
+}
+.pdf-error {
+  margin-top: 1.5rem;
+  background: #fee2e2;
+  color: #b91c1c;
+  padding: 1rem 1.5rem;
+  border-radius: 10px;
+  font-size: 1rem;
+  text-align: center;
+  width: 100%;
+  max-width: 500px;
+}
+.pdf-success {
+  margin-top: 1.5rem;
+  background: #e6fbe6;
+  color: #166534;
+  padding: 1rem 1.5rem;
+  border-radius: 10px;
+  font-size: 1rem;
+  text-align: center;
+  width: 100%;
+  max-width: 500px;
+}
 
-.logo {
-  height: 6em;
-  padding: 1.5em;
-  will-change: filter;
-  transition: filter 300ms;
+/* Chat UI */
+.chat-ui {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  margin-top: 2rem;
 }
-.logo:hover {
-  filter: drop-shadow(0 0 2em #646cffaa);
+.chat-messages {
+  width: 100%;
+  min-height: 120px;
+  margin-bottom: 1.2rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.7rem;
 }
-.logo.react:hover {
-  filter: drop-shadow(0 0 2em #61dafbaa);
+.chat-bubble {
+  max-width: 420px;
+  padding: 1rem 1.2rem;
+  border-radius: 16px;
+  font-size: 1.15rem;
+  word-break: break-word;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.04);
 }
-
-@keyframes logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+.chat-user {
+  background: #2563eb;
+  color: #fff;
+  align-self: flex-end;
 }
-
-@media (prefers-reduced-motion: no-preference) {
-  a:nth-of-type(2) .logo {
-    animation: logo-spin infinite 20s linear;
-  }
+.chat-assistant {
+  background: #f3f4f6;
+  color: #222;
+  align-self: flex-start;
 }
-
-.card {
-  padding: 2em;
-}
-
-.read-the-docs {
+.chat-label {
+  font-size: 0.95rem;
   color: #888;
+  margin-bottom: 0.3rem;
+}
+.chat-processing {
+  color: #888;
+  font-size: 1rem;
+  margin-left: 1rem;
+}
+.chat-input-row {
+  display: flex;
+  width: 100%;
+  max-width: 420px;
+  gap: 0.5rem;
+}
+.chat-input {
+  flex: 1;
+  padding: 0.8rem 1rem;
+  border-radius: 8px;
+  border: 1px solid #d1d5db;
+  font-size: 1.1rem;
+}
+.chat-send-btn {
+  background: #2563eb;
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  padding: 0 1.5rem;
+  font-size: 1.1rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+.chat-send-btn:hover:not(:disabled) {
+  background: #1d4ed8;
+}
+.chat-send-btn:disabled {
+  background: #a5b4fc;
+  cursor: not-allowed;
 }
