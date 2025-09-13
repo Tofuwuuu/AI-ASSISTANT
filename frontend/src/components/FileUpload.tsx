@@ -77,27 +77,51 @@ export const FileUpload = ({ onUploadSuccess }: FileUploadProps) => {
     };
 
     return (
-        <div className="pdf-upload-ui">
-            <div className="pdf-content">
-                <h1 className="pdf-title">PDF Chat Assistant</h1>
+        <div className="upload-container">
+            <div className="upload-content">
+                <div className="upload-header">
+                    <h2 className="upload-title">Upload Your PDF</h2>
+                    <p className="upload-subtitle">Get instant answers from your documents using AI</p>
+                </div>
+
                 <div
-                    className={`pdf-upload-box${dragActive ? ' drag-active' : ''}`}
+                    className={`upload-zone ${dragActive ? 'drag-active' : ''} ${uploading ? 'uploading' : ''}`}
                     onDragEnter={handleDrag}
                     onDragOver={handleDrag}
                     onDragLeave={handleDrag}
                     onDrop={handleDrop}
                 >
-                    <div className="pdf-upload-icon">
-                        <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
-                            <path d="M14 2v6h6" />
-                            <path d="M16 13H8" />
-                            <path d="M16 17H8" />
-                            <path d="M10 9H8" />
-                        </svg>
+                    <div className="upload-icon">
+                        {uploading ? (
+                            <div className="loading-spinner">
+                                <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                                    <path d="M21 12a9 9 0 1 1-6.219-8.56"/>
+                                </svg>
+                            </div>
+                        ) : (
+                            <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+                                <polyline points="7,10 12,15 17,10"/>
+                                <line x1="12" y1="15" x2="12" y2="3"/>
+                            </svg>
+                        )}
                     </div>
-                    <div className="pdf-upload-text">Drag & drop a PDF, or</div>
-                    <label className="pdf-upload-btn">
+                    
+                    <div className="upload-text">
+                        {uploading ? (
+                            <div>
+                                <h3>Processing your PDF...</h3>
+                                <p>This may take a few moments</p>
+                            </div>
+                        ) : (
+                            <div>
+                                <h3>Drag & drop your PDF here</h3>
+                                <p>or click to browse files</p>
+                            </div>
+                        )}
+                    </div>
+
+                    <label className="upload-button">
                         <input
                             type="file"
                             accept=".pdf"
@@ -106,18 +130,49 @@ export const FileUpload = ({ onUploadSuccess }: FileUploadProps) => {
                             ref={fileInputRef}
                             style={{ display: 'none' }}
                         />
-                        <span>Select a file</span>
+                        <span className="button-content">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                                <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+                                <path d="M14 2v6h6"/>
+                            </svg>
+                            Choose File
+                        </span>
                     </label>
+
+                    <div className="upload-info">
+                        <p>Maximum file size: 10MB</p>
+                        <p>Supported format: PDF only</p>
+                    </div>
                 </div>
-                {uploading && <div className="pdf-processing">Processing...</div>}
-                {error && <div className="pdf-error">{error}</div>}
+
+                {error && (
+                    <div className="error-message">
+                        <div className="error-icon">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                                <circle cx="12" cy="12" r="10"/>
+                                <line x1="15" y1="9" x2="9" y2="15"/>
+                                <line x1="9" y1="9" x2="15" y2="15"/>
+                            </svg>
+                        </div>
+                        <span>{error}</span>
+                    </div>
+                )}
+
                 {success && (
-                    <div className="pdf-success">
-                        <p>Successfully uploaded: {success.filename}</p>
-                        <p>PDF ID: {success.pdf_id}</p>
+                    <div className="success-message">
+                        <div className="success-icon">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                                <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/>
+                                <polyline points="22,4 12,14.01 9,11.01"/>
+                            </svg>
+                        </div>
+                        <div className="success-content">
+                            <span className="success-title">Upload successful!</span>
+                            <span className="success-filename">{success.filename}</span>
+                        </div>
                     </div>
                 )}
             </div>
         </div>
     );
-}
+};
